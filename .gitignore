@@ -1,3 +1,6 @@
+#Visual Studio workspace
+*.code-workspace
+
 # Compiled class file
 *.class
 

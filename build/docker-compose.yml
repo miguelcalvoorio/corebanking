@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  # ---------------------------
+  # Registration and
+  # Discovery Cluster
+  # ---------------------------
+  consul:
+    image: consul:1.7.3
+    container_name: "consul"
+    hostname: "consul"
+    command: consul agent -server -client 0.0.0.0 -ui -bootstrap-expect=3 -data-dir=/consul/data -retry-join=consul2 -retry-join=consul3 -datacenter=blr
+    ports:
+      - "8500:8500"
+      - "8600:8600"
+    networks:
+      - backend
+  consul2:
+    image: consul:1.7.3
+    container_name: "consul-2"
+    hostname: "consul2"
+    expose:
+      - "8500"
+      - "8600"
+    command: consul agent -server -data-dir=/consul/data -retry-join=consul -retry-join=consul3 -datacenter=blr
+    links:
+      - consul
+    networks:
+      - backend
+  consul3:
+    image: consul:1.7.3
+    container_name: "consul-3"
+    hostname: "consul3"
+    expose:
+      - "8500"
+      - "8600"
+    command: consul agent -server -data-dir=/consul/data -retry-join=consul -retry-join=consul2 -datacenter=blr
+    links:
+      - consul
+      - consul2
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
