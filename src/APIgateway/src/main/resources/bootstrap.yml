@@ -1,0 +1,9 @@
+spring:  
+    application:
+        name: api-gateway
+    cloud:
+        consul:
+            discovery:
+                instance-zone: zone1
+
+server.port: 8090

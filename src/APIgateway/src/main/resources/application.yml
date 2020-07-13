@@ -1,0 +1,19 @@
+spring:
+    application:
+        name: api-gateway
+    cloud:
+        gateway:
+            discovery:
+                locator: 
+                    enabled: true
+            routes:
+                - id: account-contract
+                  uri: lb://account-contract
+                  predicates:
+                    - Path=/accounts
+
+logging.level.com.netflix: DEBUG
+
+management:
+    security:
+        enabled: false
